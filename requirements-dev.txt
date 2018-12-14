@@ -1,0 +1,5 @@
+bandit
+hacking==1.1.0
+Legobot==1.2.4
+pytest
+pyyaml
