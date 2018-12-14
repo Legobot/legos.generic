@@ -1,8 +1,12 @@
 # legos.generic
+[![Travis](https://img.shields.io/travis/Legobot/legos.generic.svg)]() [![PyPI](https://img.shields.io/pypi/pyversions/legos.generic.svg)]() [![PyPI](https://img.shields.io/pypi/v/legos.generic.svg)]()
+
+[![PyPI](https://img.shields.io/pypi/wheel/legos.generic.svg)]() [![PyPI](https://img.shields.io/pypi/l/legos.generic.svg)]() [![PyPI](https://img.shields.io/pypi/status/legos.generic.svg)]()
 
 ## Usage
 
-- `!command` does a thing!
+This lego is a generic, config-driven lego. Instead of writing the logic of the listening for and handling for basic text triggered responses, this lego accomplishes that with a config file. See the [example config](chatbot/example-config.yaml)
+As you'll see in the example chatbot file you can specify the config file's location on invocation. If the lego will assume the config is located in the directory you are running the chatbot from and is named config.py.
 
 ## Installation
 
@@ -21,7 +25,7 @@ cd into the current directory
 
 This is a Lego designed for use with [Legobot](https://github.com/Legobot/Legobot), so you'll get Legobot along with this.
 
-To deploy it, import the package and add it to the active legos. See the default [chatbot](chatbot/chatbot.py) included with this repo as an example.
+To deploy it, import the package and add it to the active legos. See the default [chatbot](chatbot/example-chatbot.py) included with this repo as an example.
 
 ## Tweaking
 

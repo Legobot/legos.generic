@@ -1,50 +1,154 @@
+import json
+import jsonschema
 from Legobot.Lego import Lego
 import logging
+import os
+import random
+from six import string_types
 import yaml
-#  add any other imports here.
 
 logger = logging.getLogger(__name__)
+SCHEMA_PATH = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)),
+    'schema.yaml'
+)
 
 
 class Generic(Lego):
     def __init__(self, baseplate, lock, *args, **kwargs):
         super().__init__(baseplate, lock)
+        if 'config_path' not in kwargs:
+            config_path = os.path.join(
+                os.getcwd(),
+                'config.yaml'
+            )
+        else:
+            config_path = kwargs['config_path']
+        self._load_config(config_path)
+        logger.debug('CONFIG: {}'.format(self.config))
+        logger.debug('LISTENERS: {}'.format(self.listeners))
+
+    def _load_config(self, config_path):
+        self.config = yaml.load(self._load_file(config_path, 'configs: '))
+        self._validate_config(self.config)
+        self.config = self.config.get('configs', [])
+        self.listeners = {c['id']: c['listening_for']
+                          for c in self.config}
+
+    def _validate_config(self, config):
+        schema = yaml.load(self._load_file(SCHEMA_PATH))
+        try:
+            jsonschema.validate(config, schema)
+        except Exception as e:
+            logger.error('Error validating config: {}'.format(e))
+
+    def _load_file(self, path, default=None):
+        try:
+            with open(path, 'r') as f:
+                return f.read()
+        except Exception as e:
+            logger.error('Error loading file: {}\n{}'.format(path, e))
+            return default
 
     def listening_for(self, message):
-        # This method is where you define what triggers your lego.
-        # Every message on the wire will be sent here.
-        # If this method returns True the message gets sent to handle()
-        # This example checks for messages that start with !Legos
         if message.get('text'):
+            listener_map = {
+                'startswith': self._match_startswith
+            }
             try:
-                return message.get('text').starswith('!Legos')
+                for cid, listener in self.listeners.items():
+                    ltype = listener.get('type', 'startswith')
+                    if listener_map[ltype](listener.get('value'),
+                                           message.get('text')):
+                        self.match_id = cid
+                        return True
+
+                return False
             except Exception as e:
-                logger.error(('LegoName lego failed to check the message text:'
+                logger.error(('Generic lego failed to check the message text:'
                              ' {}').format(e))
                 return False
 
     def handle(self, message):
-        # This method is the main traffic cop, once the lego is triggered.
-        # Handles the subsequent logic, execution and replies
-        opts = self.build_reply_opts(message)  # builds the reply options
-        # Call another method to do something before replying
+        opts = self.build_reply_opts(message)
         response = self._build_response()
         if response:
             self.reply(message, response, opts)
 
-    def _build_response(self):
-        # This is a method specific to this lego. Build as many as you want.
-        # It will return a response to the handler, or a None if ____ (you
-        # fill in the blank.)
-        if True:
-            return 'Thanks for using the example lego.'
+    def _match_startswith(self, value, text):
+        if not isinstance(text, string_types):
+            return False
+
+        if isinstance(value, string_types):
+            return text.startswith(value)
+        elif isinstance(value, list):
+            for v in value:
+                if text.startswith(v):
+                    return True
+
+        return False
+
+    def _select_from_responses(self, handler, responses):
+        if not responses:
+            return None
+
+        response_map = {
+            'single': responses[0],
+            'random': random.choice(responses)
+        }
+        return response_map[handler.get('selector', 'single')]
+
+    def _build_config_response(self, handler):
+        responses = handler.get('responses')
+
+        return self._select_from_responses(handler, responses)
+
+    def _build_file_response(self, handler):
+        fpath = handler.get('path')
+        if not fpath:
+            return None
+
+        if handler.get('file_type') == 'yaml':
+            load_file = yaml.load(self._load_file(fpath, default='None: None'))
+        elif handler.get('file_type') == 'json':
+            load_file = json.loads(self._load_file(fpath, default='{}'))
         else:
             return None
 
-    def get_name(self):
-        # Returns the name of the Lego
-        return 'LegoName'
+        if load_file.get(self.match_id):
+            responses = load_file[self.match_id].get('responses')
+            return self._select_from_responses(handler, responses)
 
-    def get_help(self):
-        # Returns a help message for when someone types !help lego_name in chat
-        return 'type !Legos for a response.'
+        return None
+
+    def _get_config_by_id(self, cid):
+        configs = [c for c in self.config if c.get('id') == cid]
+        if configs:
+            return configs[0]
+
+        return {}
+
+    def _build_response(self):
+        handler = self._get_config_by_id(self.match_id).get('handler')
+        if handler:
+            handler_func_map = {
+                'default': None,
+                'config': self._build_config_response(handler),
+                'file': self._build_file_response(handler)
+            }
+            return handler_func_map[handler.get('type', 'default')]
+
+        return None
+
+    def get_name(self):
+        return 'Generic'
+
+    def get_help(self, **kwargs):
+        subcommands = {c['id']: c['help']['text']
+                       for c in self.config}
+        if ('sub' in kwargs):
+            return subcommands[kwargs['sub']]
+        else:
+            return '!help Generic [{}] for specific help.'.format(
+                ' | '.join([c['id'] for c in self.config])
+            )
