@@ -1,0 +1,14 @@
+configs:
+- id: cake
+  listening_for:
+    type: startswith
+    value:
+      - "!cake"
+  handler:
+    type: config
+    selector: random
+    responses:
+    - It's a lie!
+    - This was a triumph!
+  help:
+    text: "!test to return some test text"

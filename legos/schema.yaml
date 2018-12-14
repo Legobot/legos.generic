@@ -1,0 +1,71 @@
+$schema: http://json-schema.org/draft-06/schema#
+type: object
+additionalProperties: false
+required:
+- configs
+properties:
+  configs:
+    type: array
+    items:
+      $ref: "#/definitions/config"
+
+definitions:
+  config:
+    type: object
+    additionalProperties: false
+    required:
+    - id
+    - listening_for
+    - handler
+    properties:
+      id:
+        type: string
+      listening_for:
+        type: object
+      handler:
+        type: object
+      help:
+        type: object
+  listening_for:
+    type: object
+    additionalProperties: false
+    required:
+    - type
+    - value
+    properties:
+      type:
+        type: string
+      value:
+        type: array
+  handler:
+    type: object
+    additionalProperties: false
+    required:
+    - type
+    - selector
+    properties:
+      type:
+        type: string
+        enum:
+        - config
+        - file
+      selector:
+        type: string
+        enum:
+        - single
+        - random
+      file_type:
+        type: string
+        enum:
+        - yaml
+        - json
+      path:
+        type: string
+  help:
+    type: object
+    additionalProperties: false
+    required:
+    - text
+    properties:
+      text:
+        type: string

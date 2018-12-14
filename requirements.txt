@@ -1,2 +1,4 @@
 legobot==1.2.4
-pyyaml
+Legobot==1.2.4
+pyyaml>=4.2b1
+jsonschema==2.6.0

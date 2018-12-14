@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+.pytest_cache/
 *.py[cod]
 *$py.class
 
@@ -93,4 +94,6 @@ Contact GitHub API Training Shop Blog About
 # Other
 .DS_Store
 .vscode/
-chatbot/
+config.yaml
+chatbot.py
+chatbot/legos

@@ -1,19 +1,18 @@
-language: python # Configuration for using travis-ci to test and/or deploy your builds. You can use FREE travis for public repos.
-python: # You can test multiple versions. TODO: configure multi-version deployment
-- '3.6'
+language: python
+python:
+- '3.7'
 install:
 - pip install -r requirements.txt
-- pip install bandit flake8 pep8-naming
+- pip install -r requirements-dev.text
 script:
 - bandit -r .
 - flake8 .
-- pytest # Remove this if you are not running unit tests... You should run unit tests.
-deploy: # Remove this if you are not using Travis for Deployment
-  provider: pypi
-  user: pypi_username
-  password: "" # Use the travis cli to add your pypi password securely
-  on: # This configuration deploys your package to PyPi when the master branch passes and is tagged.
-    tags: true
-    distributions: sdist bdist_wheel
-    branch: master
-    repo: reponame
+- pytest
+# deploy:
+#   provider: pypi
+#   user:
+#   on:
+#     tags: true
+#     distributions: sdist bdist_wheel
+#     branch: master
+#     repo: reponame
