@@ -94,7 +94,7 @@ class Generic(Lego):
 
         response_map = {
             'single': responses[0],
-            'random': random.choice(responses)
+            'random': random.choice(responses)  # nosec
         }
         return response_map[handler.get('selector', 'single')]
 
@@ -109,7 +109,8 @@ class Generic(Lego):
             return None
 
         if handler.get('file_type') == 'yaml':
-            load_file = yaml.safe_load(self._load_file(fpath, default='None: None'))
+            load_file = yaml.safe_load(self._load_file(
+                fpath, default='None: None'))
         elif handler.get('file_type') == 'json':
             load_file = json.loads(self._load_file(fpath, default='{}'))
         else:
