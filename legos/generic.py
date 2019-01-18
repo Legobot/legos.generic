@@ -29,14 +29,14 @@ class Generic(Lego):
         logger.debug('LISTENERS: {}'.format(self.listeners))
 
     def _load_config(self, config_path):
-        self.config = yaml.load(self._load_file(config_path, 'configs: '))
+        self.config = yaml.safe_load(self._load_file(config_path, 'configs: '))
         self._validate_config(self.config)
         self.config = self.config.get('configs', [])
         self.listeners = {c['id']: c['listening_for']
                           for c in self.config}
 
     def _validate_config(self, config):
-        schema = yaml.load(self._load_file(SCHEMA_PATH))
+        schema = yaml.safe_load(self._load_file(SCHEMA_PATH))
         try:
             jsonschema.validate(config, schema)
         except Exception as e:
@@ -109,7 +109,7 @@ class Generic(Lego):
             return None
 
         if handler.get('file_type') == 'yaml':
-            load_file = yaml.load(self._load_file(fpath, default='None: None'))
+            load_file = yaml.safe_load(self._load_file(fpath, default='None: None'))
         elif handler.get('file_type') == 'json':
             load_file = json.loads(self._load_file(fpath, default='{}'))
         else:
