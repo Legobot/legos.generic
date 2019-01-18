@@ -1,0 +1,39 @@
+configs:
+- id: Test
+  listening_for:
+    type: startswith
+    value:
+      - "!test"
+      - "bang test"
+  handler:
+    type: config
+    selector: random
+    responses:
+    - This is a test response.
+    - This is another test response.
+  help:
+    text: "!test to return some test text"
+- id: Yaml
+  listening_for:
+    type: startswith
+    value:
+    - "!yaml"
+  handler:
+    type: file
+    file_type: yaml
+    path: tests/responses.yaml
+    selector: random
+  help:
+    text: "!yaml to return some test text from yaml file"
+- id: Json
+  listening_for:
+    type: startswith
+    value:
+    - "!json"
+  handler:
+    type: file
+    file_type: json
+    path: tests/responses.json
+    selector: single
+  help:
+    text: "!json to return some test text from json file"

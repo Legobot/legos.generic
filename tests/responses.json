@@ -1,0 +1,8 @@
+{
+    "Json": {
+        "responses": [
+            "This is a json response.",
+            "This is another json response."
+        ]
+    }
+}
