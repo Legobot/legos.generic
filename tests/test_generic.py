@@ -118,6 +118,6 @@ def test_build_response():
     LEGO.match_id = 'X'
     assert not LEGO._build_response()
     LEGO.match_id = 'Json'
-    assert LEGO._build_response() == 'This is a response from a json file'
+    assert LEGO._build_response() == 'This is a json response.'
 
 BASEPLATE.stop()

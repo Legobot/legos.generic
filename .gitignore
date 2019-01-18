@@ -94,6 +94,6 @@ Contact GitHub API Training Shop Blog About
 # Other
 .DS_Store
 .vscode/
-config.yaml
+chatbot/config.yaml
 chatbot.py
 chatbot/legos
