@@ -1,7 +1,5 @@
 # legos.generic
-[![Travis](https://img.shields.io/travis/Legobot/legos.generic.svg)]() [![PyPI](https://img.shields.io/pypi/pyversions/legos.generic.svg)]() [![PyPI](https://img.shields.io/pypi/v/legos.generic.svg)]()
-
-[![PyPI](https://img.shields.io/pypi/wheel/legos.generic.svg)]() [![PyPI](https://img.shields.io/pypi/l/legos.generic.svg)]() [![PyPI](https://img.shields.io/pypi/status/legos.generic.svg)]()
+[![Travis](https://img.shields.io/travis/Legobot/legos.generic.svg)]()
 
 ## Usage
 
