@@ -53,7 +53,8 @@ class Generic(Lego):
     def listening_for(self, message):
         if message.get('text'):
             listener_map = {
-                'startswith': self._match_startswith
+                'startswith': self._match_startswith,
+                'contains': self._match_contains
             }
             try:
                 for cid, listener in self.listeners.items():
