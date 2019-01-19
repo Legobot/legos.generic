@@ -88,6 +88,19 @@ class Generic(Lego):
 
         return False
 
+    def _match_contains(self, value, text):
+        if not isinstance(text, string_types):
+            return False
+
+        if isinstance(value, string_types):
+            return value.lower() in text.lower()
+        elif isinstance(value, list):
+            for v in value:
+                if v.lower() in text.lower():
+                    return True
+
+        return False
+
     def _select_from_responses(self, handler, responses):
         if not responses:
             return None
