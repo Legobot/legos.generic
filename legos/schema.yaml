@@ -35,6 +35,9 @@ definitions:
     properties:
       type:
         type: string
+        enum:
+        - startswith
+        - contains
       value:
         type: array
   handler:
