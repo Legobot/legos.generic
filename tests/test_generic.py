@@ -83,6 +83,8 @@ def test_listening_for():
     assert LEGO.listening_for({'text': '!json'})
     assert LEGO.match_id == 'Json'
     assert not LEGO.listening_for({'text': 'some random text'})
+    assert LEGO.listening_for({'text': 'This is some internal text.'})
+    assert LEGO.listening_for({'text': 'Internal text is in this.'})
 
 
 def test_match_startswith():
@@ -91,6 +93,16 @@ def test_match_startswith():
     assert LEGO._match_startswith('x', 'xy')
     assert not LEGO._match_startswith(['x', 'y'], 'z')
     assert LEGO._match_startswith(['x', 'y'], 'yz')
+
+
+def test_match_contains():
+    assert not LEGO._match_contains('x', None)
+    assert not LEGO._match_contains('x', 'y')
+    assert LEGO._match_contains('x', 'xy')
+    assert LEGO._match_contains('x', 'yxy')
+    assert LEGO._match_contains('x', 'zyx')
+    assert not LEGO._match_contains(['x', 'y'], 'z')
+    assert LEGO._match_contains(['x', 'y'], 'zy')
 
 
 def test_select_from_responses():

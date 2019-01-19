@@ -37,3 +37,13 @@ configs:
     selector: single
   help:
     text: "!json to return some test text from json file"
+- id: contains
+  listening_for:
+    type: contains
+    value:
+    - internal text
+  handler:
+    type: config
+    selector: single
+    responses:
+    - You said the secret word!
