@@ -80,10 +80,10 @@ class Generic(Lego):
             return False
 
         if isinstance(value, string_types):
-            return text.startswith(value)
+            return text.lower().startswith(value.lower())
         elif isinstance(value, list):
             for v in value:
-                if text.startswith(v):
+                if text.lower().startswith(v.lower()):
                     return True
 
         return False
