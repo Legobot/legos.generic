@@ -57,6 +57,8 @@ definitions:
         enum:
         - single
         - random
+      responses:
+        type: array
       file_type:
         type: string
         enum:
