@@ -8,11 +8,13 @@ script:
 - bandit -r .
 - flake8 .
 - pytest
-# deploy:
-#   provider: pypi
-#   user:
-#   on:
-#     tags: true
-#     distributions: sdist bdist_wheel
-#     branch: master
-#     repo: reponame
+deploy:
+  provider: pypi
+  user: drewpearce
+  password:
+    secure: Z3BYk/edRLPKu+5CRH7SQ4PN4XAoyvBVUfcvECTZUjHl1WrL0k5gAfDUwME69j059ujP0mIqy7MZkBN2vlK3SSidT+nT+upHZpsVFXy23lC1jtw8nL+qaRSwpf4oFqXBLvWbGevA/wYkoY2zkI7frLIGSqekxkVN0vkGhUlLK14OHib1pZuKmgHckMkA7pm4G2z4mv13GAIoSHiQafrUSTmsb2MxBk82CrwI8jthRowN6wRe51SMbJIpw0xpy8I/T9wlR9xD7LhnsuU5USbk4xJyVZSgGCjyjpSkmJls3EElTUT5PFvfS4ennZAwHZqxJ4Ql4MVt3j+WyJjORPAqHrml/E6pyg+RJ48x13TpuJrMGwC0Oj6evatMs8pOf7sRHw51DWGNqzLMVg7/0eUp9nflVT3JOz53pybDvGKzSKDYP1E/ojBTGp1Sc+qmCxJ1/m0XDAZ7cqvFlSmG52Xwv0EfMg+f5nF3CRdm2OeAgmtVVTtBgmSD2apmVGgX/ewWe5zucsBGejk5dK4qs0BWxg8xq1Q7EVU1VH0QbMY5VMT0iAamDbMy9cdZrSp6+atocOChpCnCeVJ2hYm547fFZ8jf6UNgzu06ZqCyzgMICe1GvBhhu0d89hBs3epJkiqWNAy6i+gghhNy1HqHa61/o7QD7Z5A+wfC3ILCLl4uL/k=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    branch: master
+    repo: reponame
