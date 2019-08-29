@@ -142,7 +142,13 @@ class Generic(Lego):
         return None
 
     def _build_attachment_response(self, handler):
-        self.attachment = handler.get('attachment')
+        attachments = handler.get('attachments')
+        attachment_map = {
+            'single': attachments[0],
+            'random': random.choice(attachments)
+        }
+        selector = handler.get('selector', '')
+        self.attachment = attachment_map.get(selector, attachments[0])
         return handler.get('alt')
 
     def _get_config_by_id(self, cid):
