@@ -64,6 +64,10 @@ definitions:
         enum:
         - yaml
         - json
+      alt:
+        type: text
+      attachments:
+        type: array
       path:
         type: string
   help:
