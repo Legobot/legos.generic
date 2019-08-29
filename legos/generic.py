@@ -17,6 +17,7 @@ SCHEMA_PATH = os.path.join(
 class Generic(Lego):
     def __init__(self, baseplate, lock, *args, **kwargs):
         super().__init__(baseplate, lock)
+        self.attachment = None
         if 'config_path' not in kwargs:
             config_path = os.path.join(
                 os.getcwd(),
@@ -74,7 +75,11 @@ class Generic(Lego):
         opts = self.build_reply_opts(message)
         response = self._build_response()
         if response:
-            self.reply(message, response, opts)
+            if self.attachment:
+                self.reply_attachment(message, response, self.attachment, opts)
+                self.attachment = None
+            else:
+                self.reply(message, response, opts)
 
     def _match_startswith(self, value, text):
         if not isinstance(text, string_types):
@@ -136,6 +141,10 @@ class Generic(Lego):
 
         return None
 
+    def _build_attachment_response(self, handler):
+        self.attachment = handler.get('attachment')
+        return handler.get('alt')
+
     def _get_config_by_id(self, cid):
         configs = [c for c in self.config if c.get('id') == cid]
         if configs:
@@ -149,7 +158,8 @@ class Generic(Lego):
             handler_func_map = {
                 'default': None,
                 'config': self._build_config_response(handler),
-                'file': self._build_file_response(handler)
+                'file': self._build_file_response(handler),
+                'attachment': self._build_attachment_response(handler)
             }
             return handler_func_map[handler.get('type', 'default')]
 
