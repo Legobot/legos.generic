@@ -47,3 +47,14 @@ configs:
     selector: single
     responses:
     - You said the secret word!
+- id: attached
+  listening_for:
+    type: contains
+    value:
+    - some value
+  handler:
+    type: attachment
+    selector: single
+    alt: alt text
+    attachment:
+    - some file link
