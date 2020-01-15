@@ -18,13 +18,8 @@ class Generic(Lego):
     def __init__(self, baseplate, lock, *args, **kwargs):
         super().__init__(baseplate, lock)
         self.attachment = None
-        if 'config_path' not in kwargs:
-            config_path = os.path.join(
-                os.getcwd(),
-                'config.yaml'
-            )
-        else:
-            config_path = kwargs['config_path']
+        config_path = kwargs.get(
+            'config_path', os.path.join(os.getcwd(), 'config.yaml'))
         self._load_config(config_path)
         logger.debug('CONFIG: {}'.format(self.config))
         logger.debug('LISTENERS: {}'.format(self.listeners))
@@ -33,8 +28,7 @@ class Generic(Lego):
         self.config = yaml.safe_load(self._load_file(config_path, 'configs: '))
         self._validate_config(self.config)
         self.config = self.config.get('configs', [])
-        self.listeners = {c['id']: c['listening_for']
-                          for c in self.config}
+        self.listeners = {c['id']: c['listening_for'] for c in self.config}
 
     def _validate_config(self, config):
         schema = yaml.safe_load(self._load_file(SCHEMA_PATH))
