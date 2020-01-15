@@ -51,7 +51,8 @@ class Generic(Lego):
         if message.get('text'):
             listener_map = {
                 'startswith': self._match_startswith,
-                'contains': self._match_contains
+                'contains': self._match_contains,
+                'regex': self._match_regex
             }
             try:
                 for cid, listener in self.listeners.items():
@@ -173,12 +174,14 @@ class Generic(Lego):
         handler = self._get_config_by_id(self.match_id).get('handler')
         if handler:
             handler_func_map = {
-                'default': None,
-                'config': self._build_config_response(handler),
-                'file': self._build_file_response(handler),
-                'attachment': self._build_attachment_response(handler)
+                'config': self._build_config_response,
+                'file': self._build_file_response,
+                'attachment': self._build_attachment_response
             }
-            return handler_func_map[handler.get('type', 'default')]
+            if handler.get('type') not in handler_func_map:
+                return None
+
+            return handler_func_map[handler.get('type')](handler)
 
         return None
 
