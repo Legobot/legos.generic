@@ -38,6 +38,7 @@ definitions:
         enum:
         - startswith
         - contains
+        - regex
       value:
         type: array
   handler:
@@ -65,7 +66,7 @@ definitions:
         - yaml
         - json
       alt:
-        type: text
+        type: string
       attachments:
         type: array
       path:
