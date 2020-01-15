@@ -1,10 +1,12 @@
 import json
-import jsonschema
-from Legobot.Lego import Lego
 import logging
 import os
 import random
+import re
 from six import string_types
+
+import jsonschema
+from Legobot.Lego import Lego
 import yaml
 
 logger = logging.getLogger(__name__)
@@ -98,6 +100,21 @@ class Generic(Lego):
             for v in value:
                 if v.lower() in text.lower():
                     return True
+
+        return False
+
+    def _match_regex(self, value, text):
+        if not isinstance(text, string_types):
+            return False
+
+        if not isinstance(value, list):
+            value = [value]
+
+        for v in value:
+            r = re.compile(v)
+            match = re.search(r, text)
+            if match:
+                return True
 
         return False
 

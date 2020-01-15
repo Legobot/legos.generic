@@ -105,6 +105,16 @@ def test_match_contains():
     assert LEGO._match_contains(['x', 'y'], 'zy')
 
 
+def test_match_regex():
+    assert not LEGO._match_regex('[a-z]+', None)
+    assert not LEGO._match_regex('[a-z]+', 'Y')
+    assert LEGO._match_regex('[a-z]+', 'y')
+    assert not LEGO._match_regex(['[a-z]+', '[0-9]+'], None)
+    assert not LEGO._match_regex(['[a-z]+', '[0-9]+'], 'Y')
+    assert LEGO._match_regex(['[a-z]+', '[0-9]+'], 'y')
+    assert LEGO._match_regex(['[a-z]+', '[0-9]+'], '4')
+
+
 def test_select_from_responses():
     assert not LEGO._select_from_responses({}, None)
     assert LEGO._select_from_responses(
